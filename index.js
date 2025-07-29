@@ -50,15 +50,22 @@ app.post('/api/persons', (request, response, next) => {
         return response.status(400).json({ 
             error: 'name or number is missing' 
         })
-    }    
+    }
 
-    const contact = new Contact({
-        name: body.name,
-        number: body.number,
-    })
-    
-    contact.save().then(result => {
-        response.json(result)
+    Contact.find({}).then(result => {
+        if (result.some(r => r.name === body.name))
+            return response.status(400).json({ 
+                error: `${body.name} is already added` 
+            })
+
+        const contact = new Contact({
+            name: body.name,
+            number: body.number,
+        })
+        
+        contact.save().then(result => {
+            response.json(result)
+        })
     })
     .catch(error => next(error))
 })
