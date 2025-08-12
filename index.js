@@ -82,7 +82,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
       return contact.save().then((updatedContact) => {
         response.json(updatedContact)
-      })
+      }).catch(error => next(error))
     })
     .catch(error => next(error))
 })
